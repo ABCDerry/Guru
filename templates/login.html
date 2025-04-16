@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | SteganoSecure</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        .login-box {
+            background: #2e2e2e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+            width: 320px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #ffb6c1;
+            font-size: 30px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 85%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 6px;
+            background: #1c1c1c;
+            color: #fff;
+            border: 2px solid #ffb6c1;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #9e0031;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #9e0031;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #800027;
+            transform: scale(1.05);
+        }
+
+        p {
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        a {
+            color: #ffb6c1;
+            text-decoration: none;
+        }
+
+        .selector-container {
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .selector-container label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Login</h2>
+        <form method="POST" action="/login">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="/register">Register</a></p>
+    </div>
+</body>
+</html>

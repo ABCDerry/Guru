@@ -1,0 +1,6 @@
+Flask
+cryptography
+Pillow
+Werkzeug
+gunicorn
+stegano

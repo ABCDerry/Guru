@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SteganoSecure | Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 40px 20px;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .logout-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    .form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 15px;
+}
+    .logout {
+      background-color: #9e0031;
+      color: #ffffff;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .logout:hover {
+      background-color: #800027;
+      transform: scale(1.05);
+    }
+
+    h1 {
+      color: #ffb6c1;
+      font-size: 40px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+    }
+
+    .selector-container {
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+
+    .selector-container label {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #eee;
+    }
+
+    .selector-container select {
+      width: 100%;
+      max-width: 500px;
+      padding: 14px 18px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      background-color: #2b2b2b;
+      color: #fff;
+      border: 2px solid #ffb6c1;
+      box-shadow: 0 0 10px rgba(255, 182, 193, 0.3);
+    }
+
+    .selector-container select:focus {
+      box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+    }
+
+    .section {
+      background: #2e2e2e;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(255, 182, 193, 0.3);
+      margin: 40px auto;
+      width: 100%;
+      max-width: 850px;
+      display: none;
+      transition: opacity 0.5s ease;
+      box-sizing: border-box;
+    }
+
+    .section h2 {
+      margin-bottom: 25px;
+      color: #ffb6c1;
+      font-size: 30px;
+      text-shadow: 0 0 10px rgba(255, 182, 193, 0.5);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 90%;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #1c1c1c;
+      color: #fff;
+      border: 2px solid #ffb6c1;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #9e0031;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    button {
+      background-color: #9e0031;
+      color: #fff;
+      font-weight: bold;
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #800027;
+      transform: scale(1.05);
+    }
+
+    .message-output {
+      margin-top: 20px;
+      color: #ffb6c1;
+      font-weight: bold;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+
+    .preview {
+      margin-top: 15px;
+    }
+
+    .preview img,
+    .preview audio,
+    .preview video {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 182, 193, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div class="logout-container">
+  <form action="/logout" method="get">
+    <button class="logout">Logout</button>
+  </form>
+</div>
+
+<h1>SteganoSecure Dashboard</h1>
+
+<!-- Selector -->
+<div class="selector-container">
+  <label for="mediaSelector">Choose Steganography Type</label>
+  <select id="mediaSelector">
+    <option value="">-- Select Type --</option>
+    <option value="image">Image</option>
+    <option value="audio">Audio</option>
+    <option value="video">Video</option>
+  </select>
+</div>
+
+<!-- Image Section -->
+<div class="section" id="section-image">
+  <h2>Image Steganography</h2>
+  <form action="/encrypt/image" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="image" accept="image/*" required onchange="previewFile(this, 'imageEncryptPreview')">
+      <div class="preview" id="imageEncryptPreview"></div>
+    </div>
+    <div class="form-group">
+      <textarea name="message" placeholder="Enter secret message" required></textarea>
+    </div>
+    <div class="form-group">
+      <input type="text" name="recipient" placeholder="Recipient (optional)">
+    </div>
+    <button type="submit">Encrypt Image</button>
+  </form>
+
+  <form id="decryptImageForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="image" accept="image/*" required onchange="previewFile(this, 'imageDecryptPreview')">
+      <div class="preview" id="imageDecryptPreview"></div>
+    </div>
+    <button type="submit">Decrypt Image</button>
+  </form>
+  <div id="imageMessage" class="message-output"></div>
+</div>
+
+<!-- Audio Section -->
+<div class="section" id="section-audio">
+  <h2>Audio Steganography</h2>
+  <form action="/encrypt/audio" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="audio" accept="audio/wav" required onchange="previewAudio(this, 'audioEncryptPreview')">
+      <div class="preview" id="audioEncryptPreview"></div>
+    </div>
+    <div class="form-group">
+      <textarea name="message" placeholder="Enter secret message" required></textarea>
+    </div>
+    <div class="form-group">
+      <input type="text" name="recipient" placeholder="Recipient (optional)">
+    </div>
+    <button type="submit">Encrypt Audio</button>
+  </form>
+
+  <form id="decryptAudioForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="audio" accept="audio/wav" required onchange="previewAudio(this, 'audioDecryptPreview')">
+      <div class="preview" id="audioDecryptPreview"></div>
+    </div>
+    <button type="submit">Decrypt Audio</button>
+  </form>
+  <div id="audioMessage" class="message-output"></div>
+</div>
+
+<!-- Video Section -->
+<div class="section" id="section-video">
+  <h2>Video Steganography</h2>
+  <form action="/encrypt/video" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="video" accept="video/*" required onchange="previewVideo(this, 'videoEncryptPreview')">
+      <div class="preview" id="videoEncryptPreview"></div>
+    </div>
+    <div class="form-group">
+      <textarea name="message" placeholder="Enter secret message" required></textarea>
+    </div>
+    <div class="form-group">
+      <input type="text" name="recipient" placeholder="Recipient (optional)">
+    </div>
+    <button type="submit">Encrypt Video</button>
+  </form>
+
+  <form id="decryptVideoForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="messagefile" accept=".txt" required>
+    </div>
+    <button type="submit">Decrypt Video</button>
+  </form>
+  <div id="videoMessage" class="message-output"></div>
+</div>
+
+<script>
+  const mediaSelector = document.getElementById('mediaSelector');
+  const sections = {
+    image: document.getElementById('section-image'),
+    audio: document.getElementById('section-audio'),
+    video: document.getElementById('section-video')
+  };
+
+  mediaSelector.addEventListener('change', function () {
+    Object.values(sections).forEach(sec => sec.style.display = 'none');
+    if (sections[this.value]) {
+      sections[this.value].style.display = 'block';
+    }
+  });
+
+  const handleForm = (formId, url, resultId) => {
+    const form = document.getElementById(formId);
+    if (form) {
+      form.onsubmit = async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const res = await fetch(url, { method: 'POST', body: formData });
+        const json = await res.json();
+        document.getElementById(resultId).innerText = 'Decrypted: ' + (json.message || json.error);
+      };
+    }
+  };
+
+  handleForm('decryptImageForm', '/decrypt/image', 'imageMessage');
+  handleForm('decryptAudioForm', '/decrypt/audio', 'audioMessage');
+  handleForm('decryptVideoForm', '/decrypt/video', 'videoMessage');
+
+  function previewFile(input, previewId) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+    };
+    if (file) reader.readAsDataURL(file);
+  }
+
+  function previewAudio(input, previewId) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById(previewId).innerHTML = `<audio controls src="${e.target.result}"></audio>`;
+    };
+    if (file) reader.readAsDataURL(file);
+  }
+
+  function previewVideo(input, previewId) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById(previewId).innerHTML = `<video controls src="${e.target.result}"></video>`;
+    };
+    if (file) reader.readAsDataURL(file);
+  }
+</script>
+
+</body>
+</html>
